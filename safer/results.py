@@ -1,11 +1,13 @@
+import re
 from datetime import datetime
 from json import dumps
 from webbrowser import open
+from pprint import pprint
+
 from dateutil import parser
 from safer.api import api_call_get_usdot
 from safer.crawler import parse_html_to_tree
 from safer.html import process_company_snapshot
-import re
 
 
 class Company:
@@ -46,26 +48,32 @@ class Company:
         self.__cargo_carried = data['cargo_carried']
 
         # Parsing date strings as datetime objects
-        # self.__latest_update = datetime.strptime(data['latest_update'], "%m/%d/%Y") if data['latest_update'] else None
-        # self.__safety_rating_date = datetime.strptime(data['safety_review_date'], "%m/%d/%Y") if data['safety_review_date'] else None
-        # self.__safety_review_date = parser.parse(data['safety_review_date']) if data['safety_review_date'] else None
-        # self.__mcs_150_form_date = parser.parse(data['mcs_150_form_date']) if data['mcs_150_form_date'] else None
-        # self.__out_of_service_date = parser.parse(data['out_of_service_date']) if data['out_of_service_date'] else None
+        self.__latest_update = Company._parse_date(data['latest_update'])
+        self.__safety_rating_date = Company._parse_date(data['safety_review_date'])
+        self.__safety_review_date = Company._parse_date(data['safety_review_date'])
+        self.__mcs_150_form_date = Company._parse_date(data['mcs_150_form_date'])
+        self.__out_of_service_date = Company._parse_date(data['out_of_service_date'])
 
-        for key in ['latest_update', 'safety_review_date', 'safety_review_date', 'mcs_150_form_date', 'out_of_service_date']:
-            setattr(self, f'__{key}', data[key])
+        # for key in ['latest_update', 'safety_review_date', 'safety_review_date', 'mcs_150_form_date', 'out_of_service_date']:
+        #     setattr(self, f'__{key}', data[key])
 
         # Keeping the raw dictionary for dumping to JSON if needed.
         self.__raw = data
+
+        pprint(self.__dict__)
 
         # Building a url for this Company
         self.__url = 'http://safer.fmcsa.dot.gov/query.asp?searchtype=ANY&query_type=queryCarrierSnapshot&query_param=USDOT&original_query_param=NAME&query_string={}'.format(self.__usdot)
         self.__raw['url'] = self.__url
 
+    @staticmethod
+    def _parse_date(d: str) -> datetime.date:
+        return parser.parse(d).date() if d else None
+
     @property
     def united_states_crashes(self):
         return self.__united_states_crashes
-        
+
     @property
     def saftey_type(self):
         return self.__safety_type
@@ -73,7 +81,7 @@ class Company:
     @property
     def operating_status(self):
         return self.__operating_status
-    
+
     @property
     def safety_review_data(self):
         return self.__safety_review_date
