@@ -46,22 +46,20 @@ class Company:
         self.__cargo_carried = data['cargo_carried']
 
         # Parsing date strings as datetime objects
-        self.__latest_update = datetime.strptime(data['latest_update'], "%m/%d/%Y") if data['latest_update'] else None
-        self.__safety_rating_date = datetime.strptime(data['safety_review_date'], "%m/%d/%Y") if data[
-            'safety_review_date'] else None
-        self.__safety_review_date = parser.parse(data['safety_review_date']) if data[
-            'safety_review_date'] else None
-        self.__mcs_150_form_date = parser.parse(data['mcs_150_form_date']) if data[
-            'mcs_150_form_date'] else None
-        self.__out_of_service_date = parser.parse(data['out_of_service_date']) if data[
-            'out_of_service_date'] else None
+        # self.__latest_update = datetime.strptime(data['latest_update'], "%m/%d/%Y") if data['latest_update'] else None
+        # self.__safety_rating_date = datetime.strptime(data['safety_review_date'], "%m/%d/%Y") if data['safety_review_date'] else None
+        # self.__safety_review_date = parser.parse(data['safety_review_date']) if data['safety_review_date'] else None
+        # self.__mcs_150_form_date = parser.parse(data['mcs_150_form_date']) if data['mcs_150_form_date'] else None
+        # self.__out_of_service_date = parser.parse(data['out_of_service_date']) if data['out_of_service_date'] else None
+
+        for key in ['latest_update', 'safety_review_date', 'safety_review_date', 'mcs_150_form_date', 'out_of_service_date']:
+            setattr(self, f'__{key}', data[key])
 
         # Keeping the raw dictionary for dumping to JSON if needed.
         self.__raw = data
 
         # Building a url for this Company
-        self.__url = 'http://safer.fmcsa.dot.gov/query.asp?searchtype=ANY&query_type=queryCarrierSnapshot&query_param=USDOT&original_query_param=NAME&query_string={}'.format(
-            self.__usdot)
+        self.__url = 'http://safer.fmcsa.dot.gov/query.asp?searchtype=ANY&query_type=queryCarrierSnapshot&query_param=USDOT&original_query_param=NAME&query_string={}'.format(self.__usdot)
         self.__raw['url'] = self.__url
 
     @property
