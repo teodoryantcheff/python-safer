@@ -60,7 +60,7 @@ class Company:
         # Keeping the raw dictionary for dumping to JSON if needed.
         self.__raw = data
 
-        pprint(self.__dict__)
+        # pprint(self.__dict__)
 
         # Building a url for this Company
         self.__url = 'http://safer.fmcsa.dot.gov/query.asp?searchtype=ANY&query_type=queryCarrierSnapshot&query_param=USDOT&original_query_param=NAME&query_string={}'.format(self.__usdot)
@@ -68,7 +68,10 @@ class Company:
 
     @staticmethod
     def _parse_date(d: str) -> datetime.date:
-        return parser.parse(d).date() if d else None
+        try:
+            return parser.parse(d).date().strftime("%Y-%m-%d")
+        except Exception:
+            return None
 
     @property
     def united_states_crashes(self):

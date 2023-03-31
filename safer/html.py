@@ -100,13 +100,13 @@ def process_final_dictionary(data):
     except (TypeError, ValueError) as e:
         pass
 
-    # Formatting Mileage Year to a dictionary
-    data['mcs_150_mileage_year'] = {
-        'mileage': int(data['mcs_150_mileage_year'].split(' ')[0].replace(',', '')) if data[
-            'mcs_150_mileage_year'] else None,
-        'year': int(data['mcs_150_mileage_year'].split(' ')[1].replace('(', '').replace(')', '')) if data[
-            'mcs_150_mileage_year'] else None
-    }
+    # # Formatting Mileage Year to a dictionary
+    # data['mcs_150_mileage_year'] = {
+    #     'mileage': int(data['mcs_150_mileage_year'].split(' ')[0].replace(',', '')) if data[
+    #         'mcs_150_mileage_year'] else None,
+    #     'year': int(data['mcs_150_mileage_year'].split(' ')[1].replace('(', '').replace(')', '')) if data[
+    #         'mcs_150_mileage_year'] else None
+    # }
 
     # HTML Returns -- for the Duns number when it should just be None or blank
     data['duns_number'] = data['duns_number'] if data['duns_number'] != '--' else None

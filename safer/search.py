@@ -26,7 +26,7 @@ class CompanySnapshot:
             raise SAFERUnreachableException('The SAFER website is currently unreachable.')
         # Parse HTML result to tree
         tree = parse_html_to_tree(r.text)
-        if not tree:
+        if tree is None:
             # Parsing will return an empty return set if there are no results
             raise CompanySnapshotNotFoundException('No records found for '+name)
         # Parse out values from HTML tree
