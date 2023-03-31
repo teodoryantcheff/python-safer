@@ -49,7 +49,7 @@ class CompanySnapshot:
             raise SAFERUnreachableException('The SAFER website is currently unreachable.')
         # Parse HTML result to tree
         tree = parse_html_to_tree(r.text)
-        if not tree:
+        if tree is None:
             # Parsing will return an empty return set if there are no results
             raise CompanySnapshotNotFoundException('The MC or MX number' +(str(number))+' was not found.')
         # Parse out values from HTML tree
@@ -75,7 +75,7 @@ class CompanySnapshot:
             raise SAFERUnreachableException('The SAFER website is currently unreachable.')
         # Parse HTML result to tree
         tree = parse_html_to_tree(r.text)
-        if not tree:
+        if tree is None:
             # Parsing will return an empty return set if there are no results
             raise CompanySnapshotNotFoundException('The USDOT number '+(str(number))+' was not found, or is marked inactive.')
         # Parse out values from HTML tree

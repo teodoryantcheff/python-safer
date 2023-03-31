@@ -48,14 +48,17 @@ class Company:
         self.__cargo_carried = data['cargo_carried']
 
         # Parsing date strings as datetime objects
-        self.__latest_update = Company._parse_date(data['latest_update'])
-        self.__safety_rating_date = Company._parse_date(data['safety_review_date'])
-        self.__safety_review_date = Company._parse_date(data['safety_review_date'])
-        self.__mcs_150_form_date = Company._parse_date(data['mcs_150_form_date'])
-        self.__out_of_service_date = Company._parse_date(data['out_of_service_date'])
+        data['latest_update'] = Company._parse_date(data['latest_update'])
+        data['safety_review_date'] = Company._parse_date(data['safety_review_date'])
+        data['safety_review_date'] = Company._parse_date(data['safety_review_date'])
+        data['mcs_150_form_date'] = Company._parse_date(data['mcs_150_form_date'])
+        data['out_of_service_date'] = Company._parse_date(data['out_of_service_date'])
 
-        # for key in ['latest_update', 'safety_review_date', 'safety_review_date', 'mcs_150_form_date', 'out_of_service_date']:
-        #     setattr(self, f'__{key}', data[key])
+        self.__latest_update = data['latest_update']
+        self.__safety_rating_date = data['safety_review_date']
+        self.__safety_review_date = data['safety_review_date']
+        self.__mcs_150_form_date = data['mcs_150_form_date']
+        self.__out_of_service_date = data['out_of_service_date']
 
         # Keeping the raw dictionary for dumping to JSON if needed.
         self.__raw = data
@@ -67,11 +70,12 @@ class Company:
         self.__raw['url'] = self.__url
 
     @staticmethod
-    def _parse_date(d: str) -> datetime.date:
+    def _parse_date(d: str) -> str:
         try:
             return parser.parse(d).date().strftime("%Y-%m-%d")
         except Exception:
             return None
+
 
     @property
     def united_states_crashes(self):
