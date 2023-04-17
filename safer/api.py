@@ -1,10 +1,11 @@
-from requests import Session
+import httpx
 
 SAFER_KEYWORD_URL = 'https://safer.fmcsa.dot.gov/keywordx.asp'
 SAFER_QUERY_URL = 'https://safer.fmcsa.dot.gov/query.asp'
 
-sess = Session()
-sess.headers.update({
+client = httpx.AsyncClient()
+
+client.headers.update({
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
     'Accept-Encoding': 'gzip, deflate',
     'Accept-Language': 'en-US,en;q=0.8,ru;q=0.6',
@@ -16,8 +17,8 @@ sess.headers.update({
 })
 
 
-def api_call_search(query):
-    r = sess.get(url=SAFER_KEYWORD_URL, params={
+async def api_call_search(query):
+    r = await client.get(url=SAFER_KEYWORD_URL, params={
         'searchstring': '*{}*'.format(query.upper()),
         'SEARCHTYPE': ''
     })
@@ -25,8 +26,8 @@ def api_call_search(query):
     return r
 
 
-def api_call_get_usdot(usdot):
-    r = sess.post(url=SAFER_QUERY_URL, data={
+async def api_call_get_usdot(usdot):
+    r = await client.post(url=SAFER_QUERY_URL, data={
         'searchType': 'ANY',
         'query_type': 'queryCarrierSnapshot',
         'query_param': 'USDOT',
@@ -35,8 +36,8 @@ def api_call_get_usdot(usdot):
     return r
 
 
-def api_call_get_mcmx(mcmx):
-    r = sess.post(url=SAFER_QUERY_URL, data={
+async def api_call_get_mcmx(mcmx):
+    r = await client.post(url=SAFER_QUERY_URL, data={
         'searchType': 'ANY',
         'query_type': 'queryCarrierSnapshot',
         'query_param': 'MC_MX',

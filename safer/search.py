@@ -10,7 +10,7 @@ class CompanySnapshot:
         pass
 
     @staticmethod
-    def search(name):
+    async def search(name):
         """
         Searches the CompanySnapshot using a name,
 
@@ -21,7 +21,7 @@ class CompanySnapshot:
             raise ValueError("'name' parameter must not be empty")
 
         # Make request
-        r = api_call_search(name)
+        r = await api_call_search(name)
         if r.status_code > 499:
             raise SAFERUnreachableException('The SAFER website is currently unreachable.')
         # Parse HTML result to tree
@@ -34,7 +34,7 @@ class CompanySnapshot:
         return SearchResultSet(search_results, name)
 
     @staticmethod
-    def get_by_mc_mx_number(number):
+    async def get_by_mc_mx_number(number):
         """
         Gets the Company Snapshot of a given MC/MX Number.
 
@@ -44,14 +44,14 @@ class CompanySnapshot:
         if isinstance(number, str):
             raise ValueError("parameter 'number' must be an int.")
 
-        r = api_call_get_mcmx(mcmx=number)
+        r = await api_call_get_mcmx(mcmx=number)
         if r.status_code > 499:
             raise SAFERUnreachableException('The SAFER website is currently unreachable.')
         # Parse HTML result to tree
         tree = parse_html_to_tree(r.text)
         if tree is None:
             # Parsing will return an empty return set if there are no results
-            raise CompanySnapshotNotFoundException('The MC or MX number' +(str(number))+' was not found.')
+            raise CompanySnapshotNotFoundException(f'The MC or MX number {str(number)} was not found.')
         # Parse out values from HTML tree
         search_results = process_company_snapshot(tree)
         return Company(
@@ -59,7 +59,7 @@ class CompanySnapshot:
         )
 
     @staticmethod
-    def get_by_usdot_number(number):
+    async def get_by_usdot_number(number):
         """
         Gets the Company Snapshot of a given USDOT Number.
 
@@ -70,14 +70,14 @@ class CompanySnapshot:
         if isinstance(number, str):
             raise ValueError("parameter 'number' must be an int.")
 
-        r = api_call_get_usdot(usdot=number)
+        r = await api_call_get_usdot(usdot=number)
         if r.status_code > 499:
             raise SAFERUnreachableException('The SAFER website is currently unreachable.')
         # Parse HTML result to tree
         tree = parse_html_to_tree(r.text)
         if tree is None:
             # Parsing will return an empty return set if there are no results
-            raise CompanySnapshotNotFoundException('The USDOT number '+(str(number))+' was not found, or is marked inactive.')
+            raise CompanySnapshotNotFoundException(f'The USDOT number {str(number)} was not found, or is marked inactive.')
         # Parse out values from HTML tree
         search_results = process_company_snapshot(tree)
         return Company(
