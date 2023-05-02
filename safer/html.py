@@ -221,7 +221,7 @@ def process_company_snapshot(tree):
         FIELDS['carrier_operation'].append(operation)
 
     # print('cargo_carried')
-    FIELDS['cargo_carried'] = set()
+    FIELDS['cargo_carried'] = set()  # todo very ugly hack!
     # Parsing out the type of cargo this carrier is authorized or carry
     # Checks the HTML for all table rows that contain and X next to them
     #
@@ -233,6 +233,8 @@ def process_company_snapshot(tree):
     except KeyError:
         pass
     print(FIELDS['cargo_carried'])
+    FIELDS['cargo_carried'] = list(FIELDS['cargo_carried'])
+
 
     """ Parsing the data from tables into nested dictionaries. """
 

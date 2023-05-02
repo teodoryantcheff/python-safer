@@ -271,7 +271,6 @@ class SearchResult:
         :return: Company Class representing the full company data
         """
         r = api_call_get_usdot(self.__result_id)
-        # print("\n-----------------\n", r.text, "\n-----------------\n")
         return Company(
             data=process_company_snapshot(
                 parse_html_to_tree(r.text)
