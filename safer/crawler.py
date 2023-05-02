@@ -12,6 +12,7 @@ def parse_html_to_tree(html_string):
     :param html_string: String of html.
     :return: ElementTree of said html.
     """
+
     if 'Sorry, no records matching' in html_string or 'BEGIN: No records found error' in html_string:
         return None
     tree = html.fromstring(html_string)

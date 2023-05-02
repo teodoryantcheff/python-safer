@@ -126,7 +126,7 @@ def process_search_result_html(tree):
     # List that will be returned
     result_set = []
 
-    # Set of xpaths needed to return specifc values.
+    # Set of xpaths needed to return specific values.
     FIELDS = {
         'id': 'th/b/a/@href',
         'name': 'th/b/a/text()',
@@ -220,12 +220,19 @@ def process_company_snapshot(tree):
             "tr[2]/td/table/tr[.//td[@class='queryfield']/text() = 'X']/td/font/text()"):
         FIELDS['carrier_operation'].append(operation)
 
-    FIELDS['cargo_carried'] = []
+    # print('cargo_carried')
+    FIELDS['cargo_carried'] = set()
     # Parsing out the type of cargo this carrier is authorized or carry
     # Checks the HTML for all table rows that contain and X next to them
-    for cargo in tree.xpath('//table')[15].xpath(
-            "tr[2]/td/table/tr[.//td[@class='queryfield']/text() = 'X']/td/font/text()"):
-        FIELDS['cargo_carried'].append(cargo)
+    #
+    for cargo in tree.xpath('//table')[15].xpath("tr[2]/td/table/tr[.//td[@class='queryfield']/text() = 'X']/td//text()"):
+        # print(cargo)
+        FIELDS['cargo_carried'].add(cargo)
+    try:
+        FIELDS['cargo_carried'].remove('X')
+    except KeyError:
+        pass
+    print(FIELDS['cargo_carried'])
 
     """ Parsing the data from tables into nested dictionaries. """
 
