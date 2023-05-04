@@ -216,8 +216,7 @@ def process_company_snapshot(tree):
     # Parsing out Carrier Operation from the list of types
     # Checks the HTML for all table rows that contain and X next to them
     FIELDS['carrier_operation'] = []
-    for operation in tree.xpath('//table')[11].xpath(
-            "tr[2]/td/table/tr[.//td[@class='queryfield']/text() = 'X']/td/font/text()"):
+    for operation in tree.xpath('//table')[11].xpath("tr[2]/td/table/tr[.//td[@class='queryfield']/text() = 'X']/td/font/text()"):
         FIELDS['carrier_operation'].append(operation)
 
     # print('cargo_carried')
@@ -228,13 +227,13 @@ def process_company_snapshot(tree):
     for cargo in tree.xpath('//table')[15].xpath("tr[2]/td/table/tr[.//td[@class='queryfield']/text() = 'X']/td//text()"):
         # print(cargo)
         FIELDS['cargo_carried'].add(cargo)
+
     try:
         FIELDS['cargo_carried'].remove('X')
     except KeyError:
         pass
-    print(FIELDS['cargo_carried'])
+    # print(FIELDS['cargo_carried'])
     FIELDS['cargo_carried'] = list(FIELDS['cargo_carried'])
-
 
     """ Parsing the data from tables into nested dictionaries. """
 
